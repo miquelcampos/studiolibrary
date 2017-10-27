@@ -218,7 +218,15 @@ class Database(QtCore.QObject):
         :type data: dict
         :rtype: dict
         """
-        studiolibrary.updateJson(self.path(), data)
+        result = studiolibrary.readJson(self.path())
+
+        for key in data:
+            if key in result:
+                result[key].update(data[key])
+            else:
+                result[key] = data[key]
+
+        studiolibrary.updateJson(self.path(), result)
 
     def replaceJson(self, old, new, count=-1):
         """
